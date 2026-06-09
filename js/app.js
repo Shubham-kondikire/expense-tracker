@@ -23,13 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // ---- NAVIGATION ----
 function setupNavigation() {
   document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', e => {
+    item.addEventListener('click', function(e) {
       e.preventDefault();
-      const section = item.dataset.section;
-      showSection(section);
-      // Update active nav item
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
+      e.stopPropagation();
+      const section = this.getAttribute('data-section');
+      if (section) showSection(section);
     });
   });
 }
@@ -49,7 +47,7 @@ function showSection(name) {
   document.getElementById('page-title').textContent = titles[name] || 'ExpenseIQ';
   // Update nav highlight
   document.querySelectorAll('.nav-item').forEach(n => {
-    n.classList.toggle('active', n.dataset.section === name);
+    n.classList.toggle('active', n.getAttribute('data-section') === name);
   });
   // Refresh data on section switch
   if (name === 'dashboard') updateDashboard();
