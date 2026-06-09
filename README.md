@@ -2,9 +2,9 @@
 
 | Field | Details |
 |-------|---------|
-| **Intern ID** | [Your Intern ID] |
-| **Full Name** | [Your Full Name] |
-| **No. of Weeks** | [e.g. 4 Weeks] |
+| **Intern ID** | CITS1700 |
+| **Full Name** | Shubham Shivaji Kondikire |
+| **No. of Weeks** | 6 Weeks |
 | **Project Name** | Expense Tracker Dashboard |
 | **Project Scope** | A fully functional expense tracking web app with dashboard, charts, budget manager, and transaction history — built using HTML, CSS, and JavaScript. |
 
