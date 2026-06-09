@@ -72,9 +72,9 @@ expense-tracker/
 ---
 
 ## 📸 Screenshots
-
-> *(Add screenshots of Dashboard, Add Transaction, History, Budget pages here)*
-
+![Dashboard](screenshots/Screenshot%20(512).png)
+![Add Expense](screenshots/Screenshot%20(513).png)
+![History](screenshots/Screenshot%20(514).png)
 ---
 
 ## 📊 Project Scope Details
