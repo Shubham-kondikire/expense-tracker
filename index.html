@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ExpenseIQ – Smart Expense Tracker</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Chart.js for graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logo-icon">💰</span>
+      <span class="logo-text">ExpenseIQ</span>
+    </div>
+    <nav>
+      <a href="#" class="nav-item active" data-section="dashboard">
+        <span>📊</span> Dashboard
+      </a>
+      <a href="#" class="nav-item" data-section="add-expense">
+        <span>➕</span> Add Expense
+      </a>
+      <a href="#" class="nav-item" data-section="history">
+        <span>📋</span> History
+      </a>
+      <a href="#" class="nav-item" data-section="budget">
+        <span>🎯</span> Budget
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <p>Internship Project</p>
+      <p class="small">HTML • CSS • JS</p>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div>
+        <h1 class="page-title" id="page-title">Dashboard</h1>
+        <p class="page-sub">Track your spending smartly</p>
+      </div>
+      <div class="topbar-right">
+        <span class="month-badge" id="current-month"></span>
+        <button class="btn-primary" onclick="showSection('add-expense')">+ Add Expense</button>
+      </div>
+    </header>
+
+    <!-- ========== SECTION: DASHBOARD ========== -->
+    <section id="dashboard" class="section active">
+
+      <!-- Summary Cards -->
+      <div class="cards-grid">
+        <div class="card card-green">
+          <div class="card-label">Total Income</div>
+          <div class="card-value" id="total-income">₹0</div>
+          <div class="card-sub">This month</div>
+        </div>
+        <div class="card card-red">
+          <div class="card-label">Total Expenses</div>
+          <div class="card-value" id="total-expense">₹0</div>
+          <div class="card-sub">This month</div>
+        </div>
+        <div class="card card-blue">
+          <div class="card-label">Balance</div>
+          <div class="card-value" id="balance">₹0</div>
+          <div class="card-sub">Remaining</div>
+        </div>
+        <div class="card card-purple">
+          <div class="card-label">Transactions</div>
+          <div class="card-value" id="txn-count">0</div>
+          <div class="card-sub">This month</div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-row">
+        <div class="chart-box">
+          <h3>Spending by Category</h3>
+          <canvas id="pieChart"></canvas>
+        </div>
+        <div class="chart-box">
+          <h3>Weekly Spending</h3>
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="table-box">
+        <div class="table-header">
+          <h3>Recent Transactions</h3>
+          <button class="btn-outline" onclick="showSection('history')">View All</button>
+        </div>
+        <table class="expense-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Type</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="recent-tbody">
+            <tr><td colspan="5" class="empty-msg">No transactions yet. Add one!</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: ADD EXPENSE ========== -->
+    <section id="add-expense" class="section">
+      <div class="form-container">
+        <h2>Add New Transaction</h2>
+        <p class="form-sub">Fill in the details below to record your transaction</p>
+
+        <div class="form-group">
+          <label>Transaction Type</label>
+          <div class="type-toggle">
+            <button class="toggle-btn active" id="btn-expense" onclick="setType('expense')">💸 Expense</button>
+            <button class="toggle-btn" id="btn-income" onclick="setType('income')">💵 Income</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="desc">Description *</label>
+            <input type="text" id="desc" placeholder="e.g. Lunch, Bus fare, Salary..." />
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount (₹) *</label>
+            <input type="number" id="amount" placeholder="Enter amount" min="1" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">Category *</label>
+            <select id="category">
+              <option value="">Select category</option>
+              <option value="Food">🍕 Food & Dining</option>
+              <option value="Transport">🚌 Transport</option>
+              <option value="Shopping">🛍️ Shopping</option>
+              <option value="Entertainment">🎬 Entertainment</option>
+              <option value="Health">💊 Health</option>
+              <option value="Education">📚 Education</option>
+              <option value="Utilities">💡 Utilities</option>
+              <option value="Salary">💼 Salary</option>
+              <option value="Other">📦 Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="date">Date *</label>
+            <input type="date" id="date" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="note">Note (Optional)</label>
+          <input type="text" id="note" placeholder="Any extra details..." />
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-secondary" onclick="resetForm()">🔄 Reset</button>
+          <button class="btn-primary" onclick="addTransaction()">✅ Save Transaction</button>
+        </div>
+
+        <div id="form-msg" class="form-msg"></div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: HISTORY ========== -->
+    <section id="history" class="section">
+      <div class="history-controls">
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="🔍 Search transactions..." oninput="filterTransactions()" />
+        </div>
+        <div class="filter-row">
+          <select id="filter-category" onchange="filterTransactions()">
+            <option value="">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Salary">Salary</option>
+            <option value="Other">Other</option>
+          </select>
+          <select id="filter-type" onchange="filterTransactions()">
+            <option value="">All Types</option>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+          <button class="btn-danger" onclick="clearAllData()">🗑️ Clear All</button>
+        </div>
+      </div>
+
+      <div class="table-box">
+        <table class="expense-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Note</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr><td colspan="7" class="empty-msg">No transactions found.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== SECTION: BUDGET ========== -->
+    <section id="budget" class="section">
+      <div class="budget-container">
+        <h2>Set Monthly Budget</h2>
+        <p class="form-sub">Set budgets per category and track your spending</p>
+
+        <div class="budget-form">
+          <select id="budget-category">
+            <option value="Food">🍕 Food & Dining</option>
+            <option value="Transport">🚌 Transport</option>
+            <option value="Shopping">🛍️ Shopping</option>
+            <option value="Entertainment">🎬 Entertainment</option>
+            <option value="Health">💊 Health</option>
+            <option value="Education">📚 Education</option>
+            <option value="Utilities">💡 Utilities</option>
+            <option value="Other">📦 Other</option>
+          </select>
+          <input type="number" id="budget-amount" placeholder="Budget amount (₹)" min="1" />
+          <button class="btn-primary" onclick="setBudget()">Set Budget</button>
+        </div>
+
+        <div id="budget-list" class="budget-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
